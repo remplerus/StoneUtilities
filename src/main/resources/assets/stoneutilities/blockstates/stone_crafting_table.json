@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "stoneutilities:block/stone_crafting_table"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "particle": "stoneutilities:block/stone_crafting_table_front",
+    "top": "stoneutilities:block/stone_crafting_table_top",
+    "down": "stoneutilities:block/stone_crafting_table_bottom",
+    "front": "stoneutilities:block/stone_crafting_table_front",
+    "side": "stoneutilities:block/stone_crafting_table_side"
+  }
+}
