@@ -3,11 +3,11 @@ package com.rempler.stoneutilities;
 import com.rempler.stoneutilities.common.init.StoneBlocks;
 import com.rempler.stoneutilities.common.init.StoneConfig;
 import com.rempler.stoneutilities.common.init.StoneItems;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 public class StoneUtilities {
     public static final String MODID = "stoneutilities";
     public static final Logger LOGGER = LogManager.getLogManager().getLogger(MODID);
-    public static final ItemGroup TAB = new ItemGroup(MODID) {
+    public static final CreativeModeTab TAB = new CreativeModeTab(MODID) {
         @Override
         public ItemStack makeIcon() {
             return StoneItems.STONE_CRAFTING_TABLE.get().getDefaultInstance();
@@ -54,7 +54,7 @@ public class StoneUtilities {
                     int j = new Random().nextInt(StoneConfig.getMaxShingleDrops());
                     ItemStack stack = StoneItems.STONE_SHARD.get().getDefaultInstance();
                     for (int i = 0; i <= j; i++) {
-                        event.getWorld().addFreshEntity(new ItemEntity((World) event.getWorld(), event.getPos().getX() + .5, event.getPos().getY() + .5, event.getPos().getZ() + .5, stack));
+                        event.getWorld().addFreshEntity(new ItemEntity((Level) event.getWorld(), event.getPos().getX() + .5, event.getPos().getY() + .5, event.getPos().getZ() + .5, stack));
                     }
                 }
             }

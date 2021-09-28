@@ -1,13 +1,13 @@
 package com.rempler.stoneutilities.common.workbench;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CraftingTableBlock;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.SimpleNamedContainerProvider;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.CraftingTableBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class StoneCraftingBlock extends CraftingTableBlock {
     public StoneCraftingBlock(Properties properties) {
@@ -15,7 +15,7 @@ public class StoneCraftingBlock extends CraftingTableBlock {
     }
 
     @Override
-    public INamedContainerProvider getMenuProvider(BlockState state, World world, BlockPos pos) {
-        return new SimpleNamedContainerProvider((id, inventory, entity) -> new StoneContainer(id, inventory, IWorldPosCallable.create(world, pos), this), new TranslationTextComponent("container.stone_crafting_table"));
+    public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos blockPos) {
+        return new SimpleMenuProvider((id, inventory, entity) -> new StoneMenu(id, inventory, ContainerLevelAccess.create(level, blockPos), this), new TranslatableComponent("container.stone_crafting_table"));
     }
 }
