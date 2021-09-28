@@ -3,6 +3,8 @@ package com.rempler.stoneutilities;
 import com.rempler.stoneutilities.common.init.StoneBlocks;
 import com.rempler.stoneutilities.common.init.StoneConfig;
 import com.rempler.stoneutilities.common.init.StoneItems;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +17,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -38,6 +41,7 @@ public class StoneUtilities {
         StoneConfig.loadConfig(StoneConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(MODID + "-common.toml"));
         StoneBlocks.init(FMLJavaModLoadingContext.get().getModEventBus());
         StoneItems.init(FMLJavaModLoadingContext.get().getModEventBus());
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventHandler::registerClient);
         MinecraftForge.EVENT_BUS.addListener(EventHandler::blockBreakSpeed);
         MinecraftForge.EVENT_BUS.addListener(EventHandler::onBlockBreak);
     }
@@ -67,6 +71,11 @@ public class StoneUtilities {
                     event.setNewSpeed((float) speed);
                 }
             }
+        }
+
+        public static void registerClient(FMLClientSetupEvent event) {
+            ItemBlockRenderTypes.setRenderLayer(StoneBlocks.STONE_LADDER.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(StoneBlocks.STONE_HOPPER.get(), RenderType.cutoutMipped());
         }
     }
 }

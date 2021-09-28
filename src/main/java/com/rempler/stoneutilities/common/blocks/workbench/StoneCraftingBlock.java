@@ -1,4 +1,4 @@
-package com.rempler.stoneutilities.common.workbench;
+package com.rempler.stoneutilities.common.blocks.workbench;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;

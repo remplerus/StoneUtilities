@@ -1,4 +1,4 @@
-package com.rempler.stoneutilities.common.workbench;
+package com.rempler.stoneutilities.common.blocks.workbench;
 
 
 import net.minecraft.world.entity.player.Inventory;
