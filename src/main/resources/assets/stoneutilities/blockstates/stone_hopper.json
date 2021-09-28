@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "stoneutilities:block/stone_hopper"
+    },
+    "facing=east": {
+      "model": "stoneutilities:block/stone_hopper_side",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "stoneutilities:block/stone_hopper_side"
+    },
+    "facing=south": {
+      "model": "stoneutilities:block/stone_hopper_side",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "stoneutilities:block/stone_hopper_side",
+      "y": 270
+    }
+  }
+}
