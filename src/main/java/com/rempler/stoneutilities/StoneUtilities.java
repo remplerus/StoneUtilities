@@ -9,17 +9,20 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Random;
 import java.util.logging.LogManager;
@@ -57,6 +60,11 @@ public class StoneUtilities {
                 if (!(event.getPlayer() instanceof FakePlayer) && held.isEmpty()) {
                     int j = new Random().nextInt(StoneConfig.getMaxShingleDrops());
                     ItemStack stack = StoneItems.STONE_SHARD.get().getDefaultInstance();
+                    if (ModList.get().isLoaded("exnihilosequentia")) {
+                        if (ForgeRegistries.ITEMS.containsKey(new ResourceLocation("exnihilosequentia", "pebble_stone"))) {
+                            stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("exnihilosequentia", "pebble_stone")));
+                        }
+                    }
                     for (int i = 0; i <= j; i++) {
                         event.getWorld().addFreshEntity(new ItemEntity((World) event.getWorld(), event.getPos().getX() + .5, event.getPos().getY() + .5, event.getPos().getZ() + .5, stack));
                     }

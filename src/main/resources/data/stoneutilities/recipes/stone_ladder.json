@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    " x ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "stoneutilities:stone_stick"
+    }
+  },
+  "result": {
+    "item": "stoneutilities:stone_ladder",
+    "count": 3
+  }
+}

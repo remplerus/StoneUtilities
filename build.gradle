@@ -71,6 +71,10 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
+    maven {
+        name = "CurseMaven"
+        url = "https://cursemaven.com"
+    }
 }
 
 dependencies {
@@ -78,6 +82,8 @@ dependencies {
 
     compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.1.121:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.1.121")
+
+    //runtimeOnly fg.deobf("curse.maven:exnihilo-400012:3480641")
 }
 
 jar {
