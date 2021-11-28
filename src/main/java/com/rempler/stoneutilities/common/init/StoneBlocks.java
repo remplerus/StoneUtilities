@@ -1,7 +1,6 @@
 package com.rempler.stoneutilities.common.init;
 
 import com.rempler.stoneutilities.StoneUtilities;
-import com.rempler.stoneutilities.common.blocks.StoneHopper;
 import com.rempler.stoneutilities.common.blocks.StoneLadder;
 import com.rempler.stoneutilities.common.blocks.workbench.StoneCraftingBlock;
 import net.minecraft.block.AbstractBlock;
@@ -20,9 +19,9 @@ public class StoneBlocks {
             () -> new StoneCraftingBlock(AbstractBlock.Properties.copy(net.minecraft.block.Blocks.CRAFTING_TABLE)
                     .strength(2F).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE)));
     public static final RegistryObject<Block> STONE_LADDER = BLOCKS.register("stone_ladder", StoneLadder::new);
-    public static final RegistryObject<Block> STONE_HOPPER = BLOCKS.register("stone_hopper", StoneHopper::new);
 
     public static void init(IEventBus iEventBus) {
+        StoneUtilities.LOGGER.info("Register Blocks");
         BLOCKS.register(iEventBus);
     }
 }

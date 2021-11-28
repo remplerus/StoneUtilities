@@ -15,6 +15,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -24,6 +25,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -33,6 +35,7 @@ public class StoneUtilities {
     public static final String MODID = "stoneutilities";
     public static final Logger LOGGER = LogManager.getLogManager().getLogger(MODID);
     public static final ItemGroup TAB = new ItemGroup(MODID) {
+        @Nonnull
         @Override
         public ItemStack makeIcon() {
             return StoneItems.STONE_CRAFTING_TABLE.get().getDefaultInstance();
@@ -40,11 +43,12 @@ public class StoneUtilities {
     };
 
     public StoneUtilities() {
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, StoneConfig.COMMON_CONFIG);
         StoneConfig.loadConfig(StoneConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(MODID + "-common.toml"));
-        StoneBlocks.init(FMLJavaModLoadingContext.get().getModEventBus());
-        StoneItems.init(FMLJavaModLoadingContext.get().getModEventBus());
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventHandler::registerClient);
+        StoneBlocks.init(eventBus);
+        StoneItems.init(eventBus);
+        eventBus.addListener(EventHandler::registerClient);
         MinecraftForge.EVENT_BUS.addListener(EventHandler::blockBreakSpeed);
         MinecraftForge.EVENT_BUS.addListener(EventHandler::onBlockBreak);
     }
@@ -61,8 +65,9 @@ public class StoneUtilities {
                     int j = new Random().nextInt(StoneConfig.getMaxShingleDrops());
                     ItemStack stack = StoneItems.STONE_SHARD.get().getDefaultInstance();
                     if (ModList.get().isLoaded("exnihilosequentia")) {
-                        if (ForgeRegistries.ITEMS.containsKey(new ResourceLocation("exnihilosequentia", "pebble_stone"))) {
-                            stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("exnihilosequentia", "pebble_stone")));
+                        ResourceLocation pebble = new ResourceLocation("exnihilosequentia", "pebble_stone");
+                        if (ForgeRegistries.ITEMS.containsKey(pebble)) {
+                            stack = new ItemStack(ForgeRegistries.ITEMS.getValue(pebble));
                         }
                     }
                     for (int i = 0; i <= j; i++) {
@@ -83,7 +88,6 @@ public class StoneUtilities {
 
         public static void registerClient(FMLClientSetupEvent event) {
             RenderTypeLookup.setRenderLayer(StoneBlocks.STONE_LADDER.get(), RenderType.cutout());
-            RenderTypeLookup.setRenderLayer(StoneBlocks.STONE_HOPPER.get(), RenderType.cutoutMipped());
         }
     }
 }

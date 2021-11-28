@@ -34,7 +34,7 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('run')
+            workingDirectory project.file('runserver')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -89,7 +89,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "Stone Utilities",
+            "Specification-Title": "Stone Utilities Reloaded",
             "Specification-Vendor": "Rempler",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
