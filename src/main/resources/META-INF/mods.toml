@@ -1,10 +1,10 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[31,)"
 license="All rights reserved"
 [[mods]]
 modId="stoneutilities"
 version="${file.jarVersion}"
 displayName="Stone Utilities"
 description='''
-Stone Utilities with stone tools
+Remake from Stone Block Utilities
 '''
