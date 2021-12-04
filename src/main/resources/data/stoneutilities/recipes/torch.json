@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "c",
+    "x"
+  ],
+  "key": {
+    "x": {
+      "item": "stoneutilities:stone_stick"
+    },
+    "c": {
+      "tag": "forge:coal"
+    }
+  },
+  "result": {
+    "item": "minecraft:torch",
+    "count": 4
+  }
+}

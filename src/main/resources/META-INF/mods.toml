@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[38,)"
 license="All rights reserved"
 [[mods]]
 modId="stoneutilities"

@@ -4,7 +4,7 @@ import com.rempler.stoneutilities.StoneUtilities;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -21,8 +21,6 @@ public class StoneItems {
             () -> new BlockItem(StoneBlocks.STONE_CRAFTING_TABLE.get(), TAB));
     public static final RegistryObject<Item> STONE_LADDER = ITEMS.register("stone_ladder",
             () -> new BlockItem(StoneBlocks.STONE_LADDER.get(), TAB));
-    public static final RegistryObject<Item> STONE_HOPPER = ITEMS.register("stone_hopper",
-            () -> new BlockItem(StoneBlocks.STONE_HOPPER.get(), TAB));
 
     public static void init(IEventBus modEventBus) {
         ITEMS.register(modEventBus);

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "s",
+    "x",
+    "x"
+  ],
+  "key": {
+    "x": {
+      "item": "stoneutilities:stone_stick"
+    },
+    "s": {
+      "tag": "forge:cobblestone"
+    }
+  },
+  "result": {
+    "item": "minecraft:stone_shovel",
+    "count": 1
+  }
+}

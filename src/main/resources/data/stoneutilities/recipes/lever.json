@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x",
+    "s"
+  ],
+  "key": {
+    "x": {
+      "item": "stoneutilities:stone_stick"
+    },
+    "s": {
+      "tag": "forge:cobblestone"
+    }
+  },
+  "result": {
+    "item": "minecraft:lever",
+    "count": 1
+  }
+}

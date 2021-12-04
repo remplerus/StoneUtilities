@@ -1,5 +1,6 @@
 package com.rempler.stoneutilities.common.jei;
 
+/*
 import com.rempler.stoneutilities.StoneUtilities;
 import com.rempler.stoneutilities.common.init.StoneBlocks;
 import mezz.jei.api.IModPlugin;
@@ -11,8 +12,8 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-@JeiPlugin
-public class StoneJeiPlugin implements IModPlugin {
+@JeiPlugin*/
+public class StoneJeiPlugin { /*implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
@@ -24,4 +25,5 @@ public class StoneJeiPlugin implements IModPlugin {
     public ResourceLocation getPluginUid() {
         return new ResourceLocation(StoneUtilities.MODID, "stone_crafting_table");
     }
+    */
 }

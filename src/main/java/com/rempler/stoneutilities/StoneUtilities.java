@@ -75,7 +75,6 @@ public class StoneUtilities {
 
         public static void registerClient(FMLClientSetupEvent event) {
             ItemBlockRenderTypes.setRenderLayer(StoneBlocks.STONE_LADDER.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(StoneBlocks.STONE_HOPPER.get(), RenderType.cutoutMipped());
         }
     }
 }

@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "stoneutilities:stone_crafting_table",
-    "stoneutilities:stone_ladder",
-    "stoneutilities:stone_hopper"
+    "stoneutilities:stone_ladder"
   ]
 }
