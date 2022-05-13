@@ -31,20 +31,17 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.VanillaInventoryCodeHooks;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class StoneHopperTile extends LockableLootTileEntity implements IHopper, ITickableTileEntity, ISidedInventory {
+public class StoneHopperTile extends LockableLootTileEntity implements IHopper, ITickableTileEntity {
     private NonNullList<ItemStack> inventoryList = NonNullList.withSize(3, ItemStack.EMPTY);
     private int transferCooldown = -1;
     private long tickedGameTime;
@@ -146,10 +143,6 @@ public class StoneHopperTile extends LockableLootTileEntity implements IHopper, 
     }
 
     private boolean transferItemsOut() {
-        if(insertHook(this)) {
-            return true;
-        }
-
         IInventory inventory = this.getInventoryForHopperTransfer();
         if(inventory == null) {
             return false;
@@ -171,6 +164,7 @@ public class StoneHopperTile extends LockableLootTileEntity implements IHopper, 
                 this.setItem(index, copy);
             }
         }
+
         return false;
     }
 
@@ -241,45 +235,6 @@ public class StoneHopperTile extends LockableLootTileEntity implements IHopper, 
         return captured;
     }
 
-    private static ItemStack putStackInInventoryAllSlots(TileEntity source, Object destination, IItemHandler destInventory, ItemStack stack) {
-        for(int slot = 0; slot < destInventory.getSlots() && !stack.isEmpty(); slot++) {
-            stack = insertStack(source, destination, destInventory, stack, slot);
-        }
-        return stack;
-    }
-
-    @SuppressWarnings("unused")
-    private static ItemStack insertStack(TileEntity source, Object destination, IItemHandler destInventory, ItemStack stack, int slot) {
-        ItemStack itemstack = destInventory.getStackInSlot(slot);
-
-        if(destInventory.insertItem(slot, stack, true).isEmpty()) {
-            boolean insertedItem = false;
-            boolean inventoryWasEmpty = isEmpty(destInventory);
-
-            if(itemstack.isEmpty()) {
-                destInventory.insertItem(slot, stack, false);
-                stack = ItemStack.EMPTY;
-                insertedItem = true;
-            }
-            else if(ItemHandlerHelper.canItemStacksStack(itemstack, stack)) {
-                int originalSize = stack.getCount();
-                stack = destInventory.insertItem(slot, stack, false);
-                insertedItem = originalSize < stack.getCount();
-            }
-
-            if(insertedItem && inventoryWasEmpty && destination instanceof HopperTileEntity) {
-                HopperTileEntity destinationHopper = (HopperTileEntity) destination;
-
-                if(!destinationHopper.isOnCustomCooldown()) {
-                    int k = 0;
-                    destinationHopper.setCooldown(8 - k);
-                }
-            }
-        }
-
-        return stack;
-    }
-
     private static ItemStack putStackInInventoryAllSlots(@Nullable IInventory source, IInventory destination, ItemStack stack, @Nullable Direction direction) {
         if(destination instanceof ISidedInventory && direction != null) {
             ISidedInventory sidedInventory = (ISidedInventory) destination;
@@ -287,8 +242,7 @@ public class StoneHopperTile extends LockableLootTileEntity implements IHopper, 
             for(int i = 0; i < slots.length && !stack.isEmpty(); i++) {
                 stack = insertStack(source, sidedInventory, stack, slots[i], direction);
             }
-        }
-        else {
+        } else {
             int i = destination.getContainerSize();
             for(int j = 0; j < i && !stack.isEmpty(); ++j) {
                 stack = insertStack(source, destination, stack, j, direction);
@@ -317,8 +271,7 @@ public class StoneHopperTile extends LockableLootTileEntity implements IHopper, 
                 destination.setItem(index, stack);
                 stack = ItemStack.EMPTY;
                 shouldInsert = true;
-            }
-            else if(canCombine(slotStack, stack)) {
+            } else if(canCombine(slotStack, stack)) {
                 int remainingCount = stack.getMaxStackSize() - slotStack.getCount();
                 int shrinkCount = Math.min(stack.getCount(), remainingCount);
                 stack.shrink(shrinkCount);
@@ -333,8 +286,8 @@ public class StoneHopperTile extends LockableLootTileEntity implements IHopper, 
                     {
                         int cooldownAmount = 0;
                         if(source instanceof StoneHopperTile) {
-                            StoneHopperTile goldenHopper = (StoneHopperTile) source;
-                            if(hopper.getLastUpdateTime() >= goldenHopper.tickedGameTime) {
+                            StoneHopperTile stoneHopperTile = (StoneHopperTile) source;
+                            if(hopper.getLastUpdateTime() >= stoneHopperTile.tickedGameTime) {
                                 cooldownAmount = 1;
                             }
                         }
@@ -356,7 +309,11 @@ public class StoneHopperTile extends LockableLootTileEntity implements IHopper, 
 
     @Nullable
     public static IInventory getSourceInventory(IHopper hopper) {
-        return getInventoryAtPosition(Objects.requireNonNull(hopper.getLevel()), hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
+        if (hopper instanceof StoneHopperTile) {
+            return getInventoryAtPosition(Objects.requireNonNull(hopper.getLevel()), hopper.getLevelX(), hopper.getLevelY() + 1.0D, hopper.getLevelZ());
+        } else {
+            return getInventoryAtPosition(hopper.getLevel(), hopper.getLevelX(), hopper.getLevelY(), hopper.getLevelZ());
+        }
     }
 
     public static List<ItemEntity> getItemEntities(IHopper hopper) {
@@ -483,67 +440,4 @@ public class StoneHopperTile extends LockableLootTileEntity implements IHopper, 
         return index != 0 && (this.inventoryList.get(0).isEmpty() || stack.getItem() == this.inventoryList.get(0).getItem());
     }
 
-    @Override
-    @Nonnull
-    public int[] getSlotsForFace(@Nonnull Direction side) {
-        return IntStream.range(0, this.inventoryList.size()).toArray();
-    }
-
-    @Override
-    public boolean canPlaceItemThroughFace(int index, @Nonnull ItemStack stack, @Nullable Direction direction) {
-        return this.inventoryList.get(0).isEmpty() || stack.getItem() == this.inventoryList.get(0).getItem();
-    }
-
-    @Override
-    public boolean canTakeItemThroughFace(int index, @Nonnull ItemStack stack, @Nonnull Direction direction) {
-        return index != 0;
-    }
-
-    private static boolean insertHook(StoneHopperTile hopper) {
-        Direction direction = hopper.getBlockState().getValue(StoneHopperBlock.FACING);
-        double x = hopper.getLevelX() + direction.getStepX();
-        double y = hopper.getLevelY() + direction.getStepY();
-        double z = hopper.getLevelZ() + direction.getStepZ();
-        Optional<Pair<IItemHandler, Object>> handler = VanillaInventoryCodeHooks.getItemHandler(Objects.requireNonNull(hopper.getLevel()), x, y, z, direction.getOpposite());
-        return handler.map(destinationResult -> {
-            IItemHandler itemHandler = destinationResult.getKey();
-            if(isFull(itemHandler)) {
-                return false;
-            }
-
-            Object destination = destinationResult.getValue();
-            for(int i = 0; i < hopper.getContainerSize(); ++i) {
-                if(!hopper.getItem(i).isEmpty() && hopper.canTakeItemThroughFace(i, hopper.getItem(i), direction)) {
-                    ItemStack originalSlotContents = hopper.getItem(i).copy();
-                    ItemStack insertStack = hopper.removeItem(i, 1);
-                    ItemStack remainder = putStackInInventoryAllSlots(hopper, destination, itemHandler, insertStack);
-                    if(remainder.isEmpty()) {
-                        return true;
-                    }
-                    hopper.setItem(i, originalSlotContents);
-                }
-            }
-            return false;
-        }).orElse(false);
-    }
-
-    private static boolean isFull(IItemHandler handler) {
-        for(int slot = 0; slot < handler.getSlots(); slot++) {
-            ItemStack stack = handler.getStackInSlot(slot);
-            if(stack.isEmpty() || stack.getCount() != stack.getMaxStackSize()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isEmpty(IItemHandler itemHandler) {
-        for(int slot = 0; slot < itemHandler.getSlots(); slot++) {
-            ItemStack stackInSlot = itemHandler.getStackInSlot(slot);
-            if(stackInSlot.getCount() > 0) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

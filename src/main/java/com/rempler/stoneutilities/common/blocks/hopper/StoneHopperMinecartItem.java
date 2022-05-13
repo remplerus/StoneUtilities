@@ -55,7 +55,7 @@ public class StoneHopperMinecartItem extends Item {
                 }
             }
 
-            AbstractMinecartEntity minecart = new StoneHopperMinecart(posX, posY + yOffset, posZ, world);
+            AbstractMinecartEntity minecart = new StoneHopperMinecartEntity(posX, posY + yOffset, posZ, world);
             if(stack.hasCustomHoverName()) {
                 minecart.setCustomName(stack.getDisplayName());
             }
@@ -92,7 +92,7 @@ public class StoneHopperMinecartItem extends Item {
             if(shape.isAscending()) {
                 yOffset = 0.5D;
             }
-            AbstractMinecartEntity minecart = new StoneHopperMinecart(pos.getX() + 0.5, pos.getY() + 0.0625 + yOffset, pos.getZ() + 0.5, world);
+            AbstractMinecartEntity minecart = new StoneHopperMinecartEntity(pos.getX() + 0.5, pos.getY() + 0.0625 + yOffset, pos.getZ() + 0.5, world);
             if(stack.hasCustomHoverName()) {
                 minecart.setCustomName(stack.getDisplayName());
             }

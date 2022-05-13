@@ -8,14 +8,12 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.minecart.ContainerMinecartEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.tileentity.IHopper;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
@@ -24,22 +22,21 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.IntStream;
 
-public class StoneHopperMinecart extends ContainerMinecartEntity implements IHopper, ISidedInventory {
+public class StoneHopperMinecartEntity extends ContainerMinecartEntity implements IHopper {
     private boolean blocked = true;
     private int transferTicker = -1;
     private final BlockPos lastPosition = BlockPos.ZERO;
 
-    public StoneHopperMinecart(World world) {
+    public StoneHopperMinecartEntity(World world) {
         this(StoneEntities.STONE_HOPPER_MINECART.get(), world);
     }
 
-    protected StoneHopperMinecart(double x, double y, double z, World world) {
+    protected StoneHopperMinecartEntity(double x, double y, double z, World world) {
         super(StoneEntities.STONE_HOPPER_MINECART.get(), x, y, z, world);
     }
 
-    public StoneHopperMinecart(EntityType<?> type, World world) {
+    public StoneHopperMinecartEntity(EntityType<?> type, World world) {
         super(type, world);
     }
 
@@ -53,19 +50,9 @@ public class StoneHopperMinecart extends ContainerMinecartEntity implements IHop
         this.blocked = blocked;
     }
 
-    public int getTransferTicker()
-    {
-        return transferTicker;
-    }
-
     public void setTransferTicker(int transferTicker)
     {
         this.transferTicker = transferTicker;
-    }
-
-    public BlockPos getLastPosition()
-    {
-        return lastPosition;
     }
 
     public boolean canTransfer()
@@ -128,21 +115,6 @@ public class StoneHopperMinecart extends ContainerMinecartEntity implements IHop
     @Override
     public double getLevelZ() {
         return this.getZ();
-    }
-
-    @Override
-    public int[] getSlotsForFace(Direction direction) {
-        return IntStream.range(1, this.getContainerSize()).toArray();
-    }
-
-    @Override
-    public boolean canPlaceItemThroughFace(int i, ItemStack stack, @Nullable Direction direction) {
-        return i != 0 && (this.getItem(0).isEmpty() || stack.getItem() == this.getItem(0).getItem());
-    }
-
-    @Override
-    public boolean canTakeItemThroughFace(int i, ItemStack stack, Direction direction) {
-        return i != 0;
     }
 
     @Override

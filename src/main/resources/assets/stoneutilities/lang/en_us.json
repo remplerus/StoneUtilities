@@ -1,9 +1,12 @@
 {
   "itemGroup.stoneutilities": "Stone Utilities",
   "container.stone_crafting_table": "Crafting",
+  "container.stone_hopper": "Stone Hopper",
   "item.stoneutilities.stone_stick": "Stone Stick",
   "item.stoneutilities.stone_shard": "Stone Shard",
   "block.stoneutilities.stone_crafting_table": "Stone Crafting Table",
   "block.stoneutilities.stone_ladder": "Stone Ladder",
-  "block.stoneutilities.stone_hopper": "Stone Hopper [WIP]"
+  "block.stoneutilities.stone_hopper": "Stone Hopper [WIP]",
+  "entity.stoneutilities.stone_hopper_minecart": "Stone Hopper Minecart",
+  "item.stoneutilities.stone_hopper_minecart": "Stone Hopper Minecart [WIP]"
 }
