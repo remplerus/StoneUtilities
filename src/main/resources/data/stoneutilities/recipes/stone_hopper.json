@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "xcx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:cobblestones"
+    },
+    "c": {
+      "tag": "forge:chests/wooden"
+    }
+  },
+  "result": {
+    "item": "stoneutilities:stone_hopper"
+  }
+}

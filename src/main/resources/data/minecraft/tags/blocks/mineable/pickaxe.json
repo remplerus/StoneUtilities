@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "stoneutilities:stone_crafting_table"
+    "stoneutilities:stone_crafting_table",
+    "stoneutilities:stone_hopper"
   ]
 }
