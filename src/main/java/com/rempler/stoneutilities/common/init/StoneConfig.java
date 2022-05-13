@@ -4,12 +4,14 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod;
+import org.antlr.v4.runtime.BufferedTokenStream;
 
 import java.nio.file.Path;
 
 @Mod.EventBusSubscriber
 public class StoneConfig {
     public static final ForgeConfigSpec COMMON_CONFIG;
+    public static final ForgeConfigSpec.IntValue cooldown;
     private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 
     private static final ForgeConfigSpec.DoubleValue breakSpeed;
@@ -20,6 +22,8 @@ public class StoneConfig {
                 .defineInRange("breakSpeed", 5D, 0D, Double.MAX_VALUE);
         maxShardDrops = COMMON_BUILDER.comment("max random drops (Default: 3)")
                 .defineInRange("maxShardDrops", 3, 1, Integer.MAX_VALUE);
+        cooldown = COMMON_BUILDER.comment("how fast should an item been transfered? (Default: 5)")
+                .defineInRange("cooldown", 5, 1, Integer.MAX_VALUE);
 
         COMMON_CONFIG = COMMON_BUILDER.build();
     }

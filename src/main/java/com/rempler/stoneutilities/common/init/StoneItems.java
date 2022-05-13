@@ -1,6 +1,7 @@
 package com.rempler.stoneutilities.common.init;
 
 import com.rempler.stoneutilities.StoneUtilities;
+import com.rempler.stoneutilities.common.blocks.hopper.StoneHopperMinecartItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -21,6 +22,10 @@ public class StoneItems {
             () -> new BlockItem(StoneBlocks.STONE_CRAFTING_TABLE.get(), TAB));
     public static final RegistryObject<Item> STONE_LADDER = ITEMS.register("stone_ladder",
             () -> new BlockItem(StoneBlocks.STONE_LADDER.get(), TAB));
+    public static final RegistryObject<Item> STONE_HOPPER = ITEMS.register("stone_hopper",
+            () -> new BlockItem(StoneBlocks.STONE_HOPPER.get(), TAB));
+    public static final RegistryObject<Item> STONE_HOPPER_MINECART = ITEMS.register("stone_hopper_minecart",
+            () -> new StoneHopperMinecartItem(TAB));
 
     public static void init(IEventBus modEventBus) {
         StoneUtilities.LOGGER.info("Register Items");
