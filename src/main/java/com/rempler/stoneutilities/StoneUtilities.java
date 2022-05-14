@@ -17,15 +17,18 @@ import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -101,12 +104,14 @@ public class StoneUtilities {
 
         public static void registerClient(FMLClientSetupEvent event) {
             RenderTypeLookup.setRenderLayer(StoneBlocks.STONE_LADDER.get(), RenderType.cutout());
+            RenderTypeLookup.setRenderLayer(StoneBlocks.STONE_TORCH.get(), RenderType.cutout());
+            RenderTypeLookup.setRenderLayer(StoneBlocks.WALL_STONE_TORCH.get(), RenderType.cutout());
             ScreenManager.register(StoneContainers.STONE_HOPPER.get(), StoneHopperScreen::new);
             RenderingRegistry.registerEntityRenderingHandler(StoneEntities.STONE_HOPPER_MINECART.get(), MinecartRenderer::new);
         }
 
-        public static void handleGoldenHopperMinecartSpawn(Entity entity) {
-        if(entity != null && entity instanceof AbstractMinecartEntity) {
+        public static void handleStoneHopperMinecartSpawn(Entity entity) {
+        if(entity instanceof AbstractMinecartEntity) {
                 Minecraft.getInstance().getSoundManager().play(new MinecartTickableSound((AbstractMinecartEntity) entity));
             }
         }

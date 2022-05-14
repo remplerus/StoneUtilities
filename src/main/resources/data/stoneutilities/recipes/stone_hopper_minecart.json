@@ -6,13 +6,13 @@
   ],
   "key": {
     "A": {
-      "item": "stoneutilities:"
+      "item": "stoneutilities:stone_hopper"
     },
     "B": {
       "item": "minecraft:minecart"
     }
   },
   "result": {
-    "item": "minecraft:hopper_minecart"
+    "item": "stoneutilities:stone_hopper_minecart"
   }
 }
