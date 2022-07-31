@@ -1,16 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "x",
-    "x"
+    "xxx",
+    "x x"
   ],
   "key": {
     "x": {
-      "tag": "forge:cobblestone"
+      "tag": "forge:stone"
     }
   },
   "result": {
-    "item": "stoneutilities:stone_stick",
-    "count": 4
+    "item": "stoneutilities:stone_helmet"
   }
 }

@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.1'
+version = '1.2'
 group = 'com.rempler.stoneutilities' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'stoneutilities'
 
@@ -21,6 +21,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17) // Mojang ships Java
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     mappings channel: 'official', version: '1.18'
+    accessTransformer = file('src/main/resources/META-INF/at.cfg')
     runs {
         client {
             workingDirectory project.file('run')
@@ -34,7 +35,7 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('run')
+            workingDirectory project.file('runserver')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -71,6 +72,10 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
+    maven {
+        name = "CurseMaven"
+        url = "https://cursemaven.com"
+    }
 }
 
 dependencies {
@@ -78,12 +83,13 @@ dependencies {
 
     //compileOnly fg.deobf("mezz.jei:jei-1.17.1:8.1.0.19:api")
     //runtimeOnly fg.deobf("mezz.jei:jei-1.17.1:8.1.0.19")
+    //runtimeOnly fg.deobf("curse.maven:exnihilo-400012:3480641")
 }
 
 jar {
     manifest {
         attributes([
-            "Specification-Title": "Stone Utilities",
+            "Specification-Title": "Stone Utilities Reloaded",
             "Specification-Vendor": "Rempler",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,

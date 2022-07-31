@@ -6,5 +6,5 @@ modId="stoneutilities"
 version="${file.jarVersion}"
 displayName="Stone Utilities"
 description='''
-Stone Utilities with stone tools
+Remake from Stone Block Utilities
 '''

@@ -21,9 +21,7 @@ public class StoneMenu extends CraftingMenu {
 
     protected static boolean isWithinUsableDistance(ContainerLevelAccess worldPos, Player playerEntity, Block targetBlock) {
         return worldPos.evaluate((world, blockPos) ->
-        {
-            return world.getBlockState(blockPos).getBlock() == targetBlock && playerEntity.distanceToSqr((double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 0.5D, (double) blockPos.getZ() + 0.5D) <= 64.0D;
-        }, true);
+                world.getBlockState(blockPos).getBlock() == targetBlock && playerEntity.distanceToSqr((double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 0.5D, (double) blockPos.getZ() + 0.5D) <= 64.0D, true);
     }
 
     @Override
