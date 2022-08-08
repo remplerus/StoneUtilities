@@ -1,25 +1,25 @@
 package com.rempler.stoneutilities.common.blocks.hopper;
 
 import com.rempler.stoneutilities.common.init.StoneContainers;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class StoneHopperContainer extends Container {
-    private final IInventory hopperInventory;
+public class StoneHopperMenu extends AbstractContainerMenu {
+    private final Container hopperInventory;
 
-    public StoneHopperContainer(int windowId, PlayerInventory playerInventory)
+    public StoneHopperMenu(int windowId, Inventory playerInventory)
     {
-        this(windowId, playerInventory, new Inventory(3));
+        this(windowId, playerInventory, new SimpleContainer(3));
     }
 
-    public StoneHopperContainer(int windowId, PlayerInventory playerInventory, IInventory hopperInventory) {
+    public StoneHopperMenu(int windowId, Inventory playerInventory, Container hopperInventory) {
         super(StoneContainers.STONE_HOPPER.get(), windowId);
         this.hopperInventory = hopperInventory;
         checkContainerSize(hopperInventory, 3);
@@ -41,16 +41,16 @@ public class StoneHopperContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
-        return this.hopperInventory.stillValid(playerIn);
+    public boolean stillValid(Player player) {
+        return this.hopperInventory.stillValid(player);
     }
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack result = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if(slot != null && slot.hasItem()) {
+        if(slot.hasItem()) {
             ItemStack slotStack = slot.getItem();
             result = slotStack.copy();
             if (index < this.hopperInventory.getContainerSize()) {
@@ -72,8 +72,7 @@ public class StoneHopperContainer extends Container {
     }
 
     @Override
-    public void removed(PlayerEntity playerIn)
-    {
+    public void removed(Player playerIn) {
         super.removed(playerIn);
         this.hopperInventory.stopOpen(playerIn);
     }

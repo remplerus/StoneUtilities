@@ -9,8 +9,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CraftingTableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
-
 public class StoneCraftingBlock extends CraftingTableBlock {
     public StoneCraftingBlock(Properties properties) {
         super(properties);

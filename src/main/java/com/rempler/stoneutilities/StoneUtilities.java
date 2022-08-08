@@ -1,52 +1,56 @@
 package com.rempler.stoneutilities;
 
 import com.rempler.stoneutilities.common.blocks.hopper.client.StoneHopperScreen;
+import com.rempler.stoneutilities.common.init.StoneBlockEntites;
 import com.rempler.stoneutilities.common.init.StoneBlocks;
 import com.rempler.stoneutilities.common.init.StoneConfig;
 import com.rempler.stoneutilities.common.init.StoneContainers;
 import com.rempler.stoneutilities.common.init.StoneEntities;
 import com.rempler.stoneutilities.common.init.StoneItems;
-import com.rempler.stoneutilities.common.init.StoneTiles;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.MinecartTickableSound;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.client.resources.sounds.MinecartSoundInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.util.Random;
-import java.util.logging.Logger;
 
 @Mod(StoneUtilities.MODID)
 public class StoneUtilities {
     public static final String MODID = "stoneutilities";
-    public static final Logger LOGGER = LogManager.getLogManager().getLogger(MODID);
+    public static TagKey<Item> STONE_RODS = ItemTags.create(new ResourceLocation("forge", "rods/stone"));
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static final CreativeModeTab TAB = new CreativeModeTab(MODID) {
         @Override
         public ItemStack makeIcon() {
@@ -60,7 +64,7 @@ public class StoneUtilities {
         StoneConfig.loadConfig(StoneConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(MODID + "-common.toml"));
         StoneBlocks.init(eventBus);
         StoneItems.init(eventBus);
-        StoneTiles.init(eventBus);
+        StoneBlockEntites.init(eventBus);
         StoneEntities.init(eventBus);
         StoneContainers.init(eventBus);
         eventBus.addListener(EventHandler::registerClient);
@@ -105,13 +109,14 @@ public class StoneUtilities {
             ItemBlockRenderTypes.setRenderLayer(StoneBlocks.STONE_LADDER.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(StoneBlocks.STONE_TORCH.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(StoneBlocks.WALL_STONE_TORCH.get(), RenderType.cutout());
-            ScreenManager.register(StoneContainers.STONE_HOPPER.get(), StoneHopperScreen::new);
-            RenderingRegistry.registerEntityRenderingHandler(StoneEntities.STONE_HOPPER_MINECART.get(), MinecartRenderer::new);
+            MenuScreens.register(StoneContainers.STONE_HOPPER.get(), StoneHopperScreen::new);
+            EntityRenderers.register(StoneEntities.STONE_HOPPER_MINECART.get(), (context) ->
+                    new MinecartRenderer<>(context, ModelLayers.MINECART));
         }
 
         public static void handleStoneHopperMinecartSpawn(Entity entity) {
-			if(entity instanceof AbstractMinecartEntity) {
-                Minecraft.getInstance().getSoundManager().play(new MinecartTickableSound((AbstractMinecartEntity) entity));
+			if(entity instanceof AbstractMinecart) {
+                Minecraft.getInstance().getSoundManager().play(new MinecartSoundInstance((AbstractMinecart) entity));
             }
         }
     }

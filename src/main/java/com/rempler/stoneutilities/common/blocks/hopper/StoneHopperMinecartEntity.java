@@ -3,41 +3,41 @@ package com.rempler.stoneutilities.common.blocks.hopper;
 import com.rempler.stoneutilities.common.init.StoneBlocks;
 import com.rempler.stoneutilities.common.init.StoneEntities;
 import com.rempler.stoneutilities.common.init.StoneItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.minecart.ContainerMinecartEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.tileentity.IHopper;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.Hopper;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class StoneHopperMinecartEntity extends ContainerMinecartEntity implements IHopper {
+public class StoneHopperMinecartEntity extends AbstractMinecartContainer implements Hopper {
     private boolean blocked = true;
     private int transferTicker = -1;
     private final BlockPos lastPosition = BlockPos.ZERO;
 
-    public StoneHopperMinecartEntity(World world) {
-        this(StoneEntities.STONE_HOPPER_MINECART.get(), world);
+    public StoneHopperMinecartEntity(Level level) {
+        this(StoneEntities.STONE_HOPPER_MINECART.get(), level);
     }
 
-    protected StoneHopperMinecartEntity(double x, double y, double z, World world) {
-        super(StoneEntities.STONE_HOPPER_MINECART.get(), x, y, z, world);
+    protected StoneHopperMinecartEntity(double x, double y, double z, Level level) {
+        super(StoneEntities.STONE_HOPPER_MINECART.get(), x, y, z, level);
     }
 
-    public StoneHopperMinecartEntity(EntityType<?> type, World world) {
-        super(type, world);
+    public StoneHopperMinecartEntity(EntityType<?> type, Level level) {
+        super(type, level);
     }
 
     public boolean isBlocked()
@@ -61,19 +61,19 @@ public class StoneHopperMinecartEntity extends ContainerMinecartEntity implement
     }
 
     private boolean captureDroppedItems() {
-        if(StoneHopperTile.pullItems(this)) {
+        if(StoneHopperBlockEntity.pullItems(level, this)) {
             return true;
         }
-        List<ItemEntity> list = this.level.getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(0.25D, 0.0D, 0.25D), EntityPredicates.ENTITY_STILL_ALIVE);
+        List<ItemEntity> list = this.level.getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(0.25D, 0.0D, 0.25D), EntitySelector.ENTITY_STILL_ALIVE);
         if(!list.isEmpty()) {
-            StoneHopperTile.captureItemEntity(this, list.get(0));
+            StoneHopperBlockEntity.captureItemEntity(this, list.get(0));
         }
         return false;
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory playerInventory) {
-        return new StoneHopperContainer(id, playerInventory, this);
+    protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
+        return new StoneHopperMenu(id, playerInventory, this);
     }
 
     @Override
@@ -97,22 +97,18 @@ public class StoneHopperMinecartEntity extends ContainerMinecartEntity implement
     }
 
     @Nullable
-    @Override
-    public World getLevel() {
+    public Level getWorld() {
         return this.level;
     }
 
-    @Override
     public double getLevelX() {
         return this.getX();
     }
 
-    @Override
     public double getLevelY() {
         return this.getY() + 0.5;
     }
 
-    @Override
     public double getLevelZ() {
         return this.getZ();
     }
@@ -151,14 +147,14 @@ public class StoneHopperMinecartEntity extends ContainerMinecartEntity implement
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundNBT compound) {
+    protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("TransferCooldown", this.transferTicker);
         compound.putBoolean("Enabled", this.blocked);
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundNBT compound) {
+    protected void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.transferTicker = compound.getInt("TransferCooldown");
         this.blocked = !compound.contains("Enabled") || compound.getBoolean("Enabled");
@@ -173,7 +169,8 @@ public class StoneHopperMinecartEntity extends ContainerMinecartEntity implement
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
+
 }

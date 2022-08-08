@@ -1,14 +1,14 @@
 package com.rempler.stoneutilities.common.blocks.hopper;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
 
 public class StoneHopperItemHandler extends InvWrapper {
-    private final StoneHopperTile hopper;
+    private final StoneHopperBlockEntity hopper;
 
-    public StoneHopperItemHandler(StoneHopperTile tile) {
+    public StoneHopperItemHandler(StoneHopperBlockEntity tile) {
         super(tile);
         this.hopper = tile;
     }
